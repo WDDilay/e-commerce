@@ -25,22 +25,6 @@ const m = {
         res.render('single-news');
     },
 
-    shop:(req, res) => {
-        res.render('shop');
-    },
-
-    checkout:(req, res) => {
-        res.render('checkout');
-    },
-
-    singleproduct:(req, res) => {
-        res.render('single-product');
-    },
-
-    cart:(req, res) => {
-        res.render('cart');
-    },
-
     e404:(req, res) => {
         res.render('e404');
     },

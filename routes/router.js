@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controller/Controller.js');
+const Productcontroller = require('../controller/ProductController.js');
+const Usercontroller = require('../controller/Usercontroller.js');
 
 
 router.get('/', controller.main);
@@ -9,12 +11,12 @@ router.get('/about', controller.about);
 router.get('/contact', controller.contact);
 router.get('/news', controller.news);
 router.get('/single-news', controller.singlenews);
-router.get('/shop', controller.shop);
-router.get('/checkout', controller.checkout);
-router.get('/single-product', controller.singleproduct);
-router.get('/cart', controller.cart);
+router.get('/shop', Productcontroller.shop);
+router.get('/checkout', Productcontroller.checkout);
+router.get('/single-product', Productcontroller.singleproduct);
+router.get('/cart', Productcontroller.cart);
 router.get('/404', controller.e404);
-router.get('/login', controller.login);
+router.get('/login', Usercontroller.login);
 
 
 module.exports = router;
