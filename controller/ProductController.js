@@ -1,8 +1,12 @@
-const db = require('../config/db');
+const product = require('../models/product');
 const p ={
-    shop:(req, res) => {
-        res.render('shop');
+    shop: (req, res) => {
+        product.getAll((err, result) => {
+            if (err) throw err;
+            res.render('shop', { product: result }); 
+        });
     },
+
 
     checkout:(req, res) => {
         res.render('checkout');
