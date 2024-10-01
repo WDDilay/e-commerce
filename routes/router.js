@@ -17,6 +17,7 @@ router.get('/single-product', Productcontroller.singleproduct);
 router.get('/cart', Productcontroller.cart);
 router.get('/404', controller.e404);
 router.get('/login', Usercontroller.login);
+router.get('/adminpage', Usercontroller.adminpage);
 
 
 module.exports = router;
