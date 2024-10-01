@@ -1,3 +1,4 @@
+const db = require('../config/db');
 const m = {
     main:(req, res) => {
         res.render('index');
