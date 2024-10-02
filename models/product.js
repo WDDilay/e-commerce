@@ -14,7 +14,15 @@ const Product = {
     deleteProduct: (product_id, callback) => {
         const query = "DELETE FROM products WHERE product_id = ?";
         db.query(query, [product_id], callback);
+    },
+
+    getById: (product_id, callback) => {
+        const query = "SELECT * FROM products WHERE product_id = ?";
+        db.query(query, [product_id], callback);
     }
+
+    
+    
 };
 
 module.exports = Product;

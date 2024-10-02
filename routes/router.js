@@ -40,4 +40,7 @@ router.post('/addProducts', upload.single('product_image'), Productcontroller.ad
 router.post('/deleteProduct/:product_id', Productcontroller.deleteProduct);
 
 
+
+
+
 module.exports = router;
