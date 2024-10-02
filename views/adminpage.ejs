@@ -12,7 +12,7 @@
 
         <!-- Add Product Form -->
         <h3>Add New Product</h3>
-        <form id="addProductForm" method="POST" action="/admin/add-product" enctype="multipart/form-data">
+        <form id="addProductForm" method="POST" action="/addProducts" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="productName">Product Name</label>
                 <input type="text" class="form-control" id="productName" name="product_name" required>
@@ -35,9 +35,12 @@
         <hr>
 
         <!-- List of Products -->
+        
         <h3>Existing Products</h3>
         <table class="table table-striped">
+            
             <thead>
+                
                 <tr>
                     <th>Product ID</th>
                     <th>Product Name</th>
@@ -48,24 +51,24 @@
                 </tr>
             </thead>
             <tbody>
-                <% products.forEach(function(product) { %>
+                <% product.forEach(pr =>{ %>
                 <tr>
-                    <td><%= product.product_id %></td>
-                    <td><%= product.product_name %></td>
-                    <td><img src="/uploads/<%= product.product_image %>" alt="Product Image" width="100"></td>
-                    <td><%= product.price %></td>
-                    <td><%= product.stock_quantity %></td>
+                    <td><%= pr.id %></td>
+                    <td><%= pr.product_name %></td>
+                    <td><img src="" alt="Product Image" width="100"></td>
+                    <td><%= pr.price %></td>
+                    <td><%= pr.stock_quantity %></td>
                     <td>
                         <!-- Update Product Button -->
-                        <button class="btn btn-warning" data-toggle="modal" data-target="#updateModal<%= product.product_id %>">Update</button>
+                        <button class="btn btn-warning" data-toggle="modal" data-target="">Update</button>
 
                         <!-- Delete Product Button -->
-                        <form action="/admin/delete-product/<%= product.product_id %>" method="POST" class="d-inline">
+                        <form action="/deleteProduct/<%= pr.product_id %>" method="POST" class="d-inline">
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
 
                         <!-- Update Product Modal -->
-                        <div class="modal fade" id="updateModal<%= product.product_id %>" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -74,23 +77,23 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form method="POST" action="/admin/update-product/<%= product.product_id %>" enctype="multipart/form-data">
+                                    <form method="POST" action="" enctype="multipart/form-data">
                                         <div class="modal-body">
                                             <div class="form-group">
-                                                <label for="productName<%= product.product_id %>">Product Name</label>
-                                                <input type="text" class="form-control" id="productName<%= product.product_id %>" name="product_name" value="<%= product.product_name %>" required>
+                                                <label for="productName">Product Name</label>
+                                                <input type="text" class="form-control" id="productName" name="product_name" value="Product" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="productImage<%= product.product_id %>">Product Image</label>
-                                                <input type="file" class="form-control" id="productImage<%= product.product_id %>" name="product_image">
+                                                <label for="productImage">Product Image</label>
+                                                <input type="file" class="form-control" id="productImage" name="product_image">
                                             </div>
                                             <div class="form-group">
-                                                <label for="price<%= product.product_id %>">Price</label>
-                                                <input type="number" class="form-control" id="price<%= product.product_id %>" name="price" value="<%= product.price %>" required>
+                                                <label for="price">Price</label>
+                                                <input type="number" class="form-control" id="price" name="price" value="" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="stockQuantity<%= product.product_id %>">Stock Quantity</label>
-                                                <input type="number" class="form-control" id="stockQuantity<%= product.product_id %>" name="stock_quantity" value="<%= product.stock_quantity %>" required>
+                                                <label for="stockQuantity">Stock Quantity</label>
+                                                <input type="number" class="form-control" id="stockQuantity" name="stock_quantity" value="" required>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -103,10 +106,13 @@
                         </div>
                     </td>
                 </tr>
-                <% }); %>
+                <% }) %>
             </tbody>
+            
         </table>
+        
     </div>
+    
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>

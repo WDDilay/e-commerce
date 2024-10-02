@@ -24,14 +24,7 @@ const info = {
         });
     },
 
-    addProduct: (data, callback) => {
-        const query = "INSERT INTO products (product_id, product_name, product_image, price, stock_quantity) VALUES (?, ?, ?, ?, ?)";
-        db.query(
-            query, 
-            [data.product_id, data.product_name, data.product_image, data.price, data.stock_quantity],
-            callback
-        );
-    }
+    
 };
 
 module.exports = info;
