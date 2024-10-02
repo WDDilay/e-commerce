@@ -60,6 +60,31 @@
     </div>
 </div>
 
+<script>
+    document.querySelectorAll('.cart-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            const productId = this.getAttribute('data-product-id');
+            fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ product_id: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Product added to cart!');
+                    // Optionally, update cart display here.
+                } else {
+                    alert('Failed to add product to cart.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+    </script>
 
 <%-include('partials/logo.ejs')%>
 <%-include('partials/footer.ejs')%>
