@@ -35,12 +35,16 @@ router.get('/single-news', controller.singlenews);
 router.get('/shop', Productcontroller.shop);
 router.get('/checkout', Productcontroller.checkout);
 router.get('/single-product', Productcontroller.singleproduct);
-router.get('/cart', Productcontroller.cart);
+router.get('/cart', CartController.cart);
 router.get('/404', controller.e404);
 router.get('/login', Usercontroller.login);
 router.get('/admin', Productcontroller.adminpage);
 router.post('/addProducts', upload.single('product_image'), Productcontroller.addProducts);
 router.post('/deleteProduct/:product_id', Productcontroller.deleteProduct);
 router.post('/add-to-cart', CartController.addToCart);
+router.post('/cart/delete/:cart_item_id', CartController.deltoCart);
+
+
+
 
 module.exports = router;

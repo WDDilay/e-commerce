@@ -30,6 +30,23 @@ const c = {
             // If a cart_id already exists, directly add the product to cart_items
             addProductToCart(cart_id, product_id, price, req, res);
         }
+    },
+
+    // View cart function to display the cart items
+    cart: (req, res) => {
+        cartModel.getAllItems((err, result) => {
+            if (err) throw err;
+            res.render('cart', { cartItems: result });
+        });
+    },
+
+    deltoCart: (req, res) =>{
+        const itemId = req.params.cart_item_id;
+
+        cartModel.deleteItem(itemId, (err, result) => {
+            if (err) throw err;
+            res.redirect('/cart');  // After deletion, redirect back to the admin page
+        });
     }
 };
 

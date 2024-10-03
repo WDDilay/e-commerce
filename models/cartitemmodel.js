@@ -17,6 +17,17 @@ const cart = {
         db.query(query, [cart_id], callback);
     },
 
+    getAllItems: (callback) => {
+        const query = `
+            SELECT ci.*, p.product_name, p.product_image
+            FROM cart_items ci
+            JOIN products p ON ci.product_id = p.product_id
+        `;
+        db.query(query, callback);
+    },
+    
+    
+
     // Update quantity for an item in the cart
     updateQuantity: (cart_item_id, quantity, callback) => {
         const query = "UPDATE cart_items SET quantity = ? WHERE cart_item_id = ?";
