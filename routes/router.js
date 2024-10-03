@@ -7,6 +7,9 @@ const path = require('path');
 
 const Productcontroller = require('../controller/ProductController.js');
 const Usercontroller = require('../controller/Usercontroller.js');
+const CartController = require('../controller/CartController.js');
+
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = path.join(__dirname, '../uploads'); 
@@ -38,10 +41,6 @@ router.get('/login', Usercontroller.login);
 router.get('/admin', Productcontroller.adminpage);
 router.post('/addProducts', upload.single('product_image'), Productcontroller.addProducts);
 router.post('/deleteProduct/:product_id', Productcontroller.deleteProduct);
-
-
-
-
-
+router.post('/add-to-cart', CartController.addToCart);
 
 module.exports = router;
