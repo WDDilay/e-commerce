@@ -35,9 +35,9 @@ const cart = {
     },
 
     // Remove item from cart
-    deleteItem: (cart_item_id, callback) => {
+    deleteItem: (cart_item_id, quantity, callback) => {
         const query = "DELETE FROM cart_items WHERE cart_item_id = ?";
-        db.query(query, [cart_item_id], callback);
+        db.query(query, [quantity, cart_item_id], callback);
     }
 };
 

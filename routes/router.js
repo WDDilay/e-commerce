@@ -43,6 +43,7 @@ router.post('/addProducts', upload.single('product_image'), Productcontroller.ad
 router.post('/deleteProduct/:product_id', Productcontroller.deleteProduct);
 router.post('/add-to-cart', CartController.addToCart);
 router.post('/cart/delete/:cart_item_id', CartController.deltoCart);
+router.post('/cart/update-quantity/:cart_item_id', CartController.updateQuantity);
 
 
 

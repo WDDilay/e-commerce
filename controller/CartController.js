@@ -47,6 +47,24 @@ const c = {
             if (err) throw err;
             res.redirect('/cart');  // After deletion, redirect back to the admin page
         });
+    },
+
+    updateQuantity: (req, res) => {
+        const itemId = req.params.cart_item_id;
+        const newQuantity = req.body.quantity;
+    
+        if (newQuantity <= 0) {
+            return res.status(400).send('Quantity must be greater than 0');
+        }
+    
+        cartModel.updateQuantity(itemId, newQuantity, (err, result) => {
+            if (err) {
+                console.error('Error updating quantity:', err);
+                return res.status(500).send('Error updating quantity');
+            }
+    
+            res.status(200).send('Quantity updated successfully');
+        });
     }
 };
 
