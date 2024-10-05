@@ -16,12 +16,12 @@ const info = {
                 return callback(null, false);
             }
 
-            const user = results[0];
+            const users = results[0];
 
             // Check if the password matches (this is a simple plain-text comparison, but you should hash passwords)
-            if (user.password === password) {
+            if (users.password === password) {
                 // Password matches, return user data
-                return callback(null, user);
+                return callback(null, users);
             } else {
                 // Password doesn't match
                 return callback(null, false);

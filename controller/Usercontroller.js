@@ -12,6 +12,21 @@ const u = {
             res.redirect('login')
         });
         
+    },
+
+    loginuser: (req, res) => {
+        const { email, password } = req.body;
+        console.log("Session:", req.session);
+
+        user.login(email, password, (err, user) => {
+            if (err) throw err;
+            if (user) {
+                req.session.username = user.username;
+                res.render('index', { username: user.username });
+            } else {
+                res.send('Invalid email or password');
+            }
+        });
     }
     
 }
