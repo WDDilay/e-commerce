@@ -54,6 +54,14 @@ const u = {
                 });
             }
         });
+    },
+    logout: (req, res) => {
+        req.session.destroy((err) => {
+            if (err) {
+                console.log(err);
+            }
+            res.redirect('/');  // Redirect to the homepage after logout
+        });
     }
     
 }

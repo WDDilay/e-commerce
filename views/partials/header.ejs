@@ -51,10 +51,13 @@
                                 <div class="header-icons">
                                     <a class="shopping-cart" href="/cart"><i class="fas fa-shopping-cart"></i></a>
                                     <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-                                    <a href="/login"><i class="fas fa-user"></i></a>
+                            
                                     <% if (username) { %>
+                                        <i class="fas fa-user"style="color: #fff"></i>
                                         <span class="username-display" style="color: #fff;"><%= username %></span>
+                                        <a href="/logout" style="color: #fff;">Logout</a> <!-- Logout button -->
                                     <% } else { %>
+                                        <a href="/login"><i class="fas fa-user"></i> Login</a> <!-- Login button -->
                                         <span class="username-display" style="color: #fff;">Guest</span>
                                     <% } %>
                                 </div>
