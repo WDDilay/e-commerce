@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', routes);
 app.use(express.static('public'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.json());
 
 app.listen(3000, () =>{
     console.log('Server is running on port http://localhost:3000');

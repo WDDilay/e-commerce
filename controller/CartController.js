@@ -3,14 +3,13 @@ const db = require('../config/db');
 
 const c = {
     addToCart: (req, res) => {
-        const { product_id, product_name, product_image, price } = req.body;
+        const { product_id, price } = req.body;
 
         // Check if there's already a cart for this session/user
         let cart_id = req.session.cart_id;
 
         if (!cart_id) {
-            // If no cart_id in session, create a new cart in the 'cart' table
-            const user_id = req.session.user_id || null;  // Use null if user_id is not available
+            const user_id = req.session.user_id || null;
             const created_at = new Date();
 
             const createCartQuery = "INSERT INTO cart (user_id, created_at) VALUES (?, ?)";
@@ -20,15 +19,27 @@ const c = {
                     return res.status(500).send('Error creating new cart.');
                 }
 
-                cart_id = result.insertId;  // Get the new cart_id
-                req.session.cart_id = cart_id;  // Save the cart_id in the session
+                cart_id = result.insertId;
+                req.session.cart_id = cart_id;
 
-                // Now add the product to cart_items
-                addProductToCart(cart_id, product_id, price, req, res);
+                // Add product to cart using the new model method
+                cartModel.addOrUpdateProduct(cart_id, product_id, price, (err) => {
+                    if (err) {
+                        console.error('Error adding product to cart:', err);
+                        return res.status(500).send('Error adding product to cart.');
+                    }
+                    res.redirect('/cart');
+                });
             });
         } else {
-            // If a cart_id already exists, directly add the product to cart_items
-            addProductToCart(cart_id, product_id, price, req, res);
+            // Cart ID exists, so directly add or update the product in the cart
+            cartModel.addOrUpdateProduct(cart_id, product_id, price, (err) => {
+                if (err) {
+                    console.error('Error adding product to cart:', err);
+                    return res.status(500).send('Error adding product to cart.');
+                }
+                res.redirect('/cart');
+            });
         }
     },
 
@@ -49,23 +60,65 @@ const c = {
         });
     },
 
-    updateQuantity: (req, res) => {
-        const itemId = req.params.cart_item_id;
-        const newQuantity = req.body.quantity;
-    
-        if (newQuantity <= 0) {
-            return res.status(400).send('Quantity must be greater than 0');
-        }
-    
-        cartModel.updateQuantity(itemId, newQuantity, (err, result) => {
-            if (err) {
-                console.error('Error updating quantity:', err);
-                return res.status(500).send('Error updating quantity');
-            }
-    
-            res.status(200).send('Quantity updated successfully');
-        });
+   // CartController.js
+   // In CartController.js
+updateQuantity: (req, res) => {
+    const itemId = req.params.cart_item_id;
+    const newQuantity = req.body.quantity;
+
+    if (!newQuantity) {
+        return res.status(400).json({ message: 'Quantity is required' });
     }
+
+    cartModel.updateQuantity(itemId, newQuantity, (err, result) => {
+        if (err) {
+            console.error('Error updating quantity:', err);
+            return res.status(500).json({ message: 'Database error' });
+        }
+        res.status(200).json({ message: 'Quantity updated successfully' });
+    });
+},
+ addToCart: (req, res) => {
+        const { product_id, price } = req.body;
+
+        // Check if there's already a cart for this session/user
+        let cart_id = req.session.cart_id;
+
+        if (!cart_id) {
+            const user_id = req.session.user_id || null;
+            const created_at = new Date();
+
+            const createCartQuery = "INSERT INTO cart (user_id, created_at) VALUES (?, ?)";
+            db.query(createCartQuery, [user_id, created_at], (err, result) => {
+                if (err) {
+                    console.error('Error creating new cart:', err);
+                    return res.status(500).send('Error creating new cart.');
+                }
+
+                cart_id = result.insertId;
+                req.session.cart_id = cart_id;
+
+                // Add product to cart using the new model method
+                cartModel.addOrUpdateProduct(cart_id, product_id, price, (err) => {
+                    if (err) {
+                        console.error('Error adding product to cart:', err);
+                        return res.status(500).send('Error adding product to cart.');
+                    }
+                    res.redirect('/cart');
+                });
+            });
+        } else {
+            // Cart ID exists, so directly add or update the product in the cart
+            cartModel.addOrUpdateProduct(cart_id, product_id, price, (err) => {
+                if (err) {
+                    console.error('Error adding product to cart:', err);
+                    return res.status(500).send('Error adding product to cart.');
+                }
+                res.redirect('/cart');
+            });
+        }
+    }
+
 };
 
 // Helper function to add product to the cart_items table
