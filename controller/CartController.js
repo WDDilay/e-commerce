@@ -47,7 +47,7 @@ const c = {
     cart: (req, res) => {
         cartModel.getAllItems((err, result) => {
             if (err) throw err;
-            res.render('cart', { cartItems: result });
+            res.render('cart', { cartItems: result, username: req.session.username || null });
         });
     },
 

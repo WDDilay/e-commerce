@@ -81,7 +81,11 @@
                         </tbody>
                     </table>
                     <div class="cart-buttons">
-                        <a href="checkout.html" class="boxed-btn black">Check Out</a>
+                        <% if (!username) { %>  <!-- If the user is not logged in -->
+                            <button class="cart-btn" id="checkout-btn">Check Out</button>
+                        <% } else { %> <!-- If the user is logged in -->
+                            <a href="/checkout" class="boxed-btn black">Check Out</a>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -120,6 +124,18 @@
         });
     });
 });
+
+const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', function() {
+            if (!'<%= username %>') {  // Check if the user is logged in
+                // Show alert and redirect to login page
+                if (confirm("You need to log in first to check out. Would you like to log in now?")) {
+                    window.location.href = '/login';  // Redirect to login page
+                }
+            }
+        });
+    }
 
 </script>
 
