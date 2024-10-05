@@ -11,6 +11,11 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use((req, res, next) => {
+    res.locals.username = req.session.username || null;  // If not logged in, username will be null
+    next();
+});
+
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));

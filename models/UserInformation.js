@@ -27,6 +27,25 @@ const info = {
                 return callback(null, false);
             }
         });
+    },
+
+    adminLogin: (email, password, callback) => {
+        const query = "SELECT * FROM admin WHERE email = ?";
+        db.query(query, [email], (err, results) => {
+            if (err) return callback(err);
+
+            if (results.length === 0) {
+                return callback(null, false);  // No admin found
+            }
+
+            const admin = results[0];
+
+            if (admin.password === password) {
+                return callback(null, admin);  // Password matches
+            } else {
+                return callback(null, false);  // Password mismatch
+            }
+        });
     }
 };
 
