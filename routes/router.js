@@ -44,8 +44,8 @@ router.post('/deleteProduct/:product_id', Productcontroller.deleteProduct);
 router.post('/add-to-cart', CartController.addToCart);
 router.post('/cart/delete/:cart_item_id', CartController.deltoCart);
 router.post('/cart/update-quantity/:cart_item_id', CartController.updateQuantity);
-
-
+router.post('/register', Usercontroller.register);
+router.post('/login', Usercontroller.login);
 
 
 module.exports = router;

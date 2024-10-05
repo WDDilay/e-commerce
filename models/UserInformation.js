@@ -1,7 +1,12 @@
 const db = require('../config/db');
 
 const info = {
-    admin: (email, password, callback) => {
+    register: (data, callback) => {
+        const query = "insert into users (username, email, password, phone) values (?,?,?,?)";
+        db.query(query, [data.username, data.email, data.password, data.phone], callback);
+    },
+
+    login: (email, password, callback) => {
         const query = "SELECT * FROM users WHERE email = ?";
         db.query(query, [email], (err, results) => {
             if (err) return callback(err);
@@ -22,9 +27,7 @@ const info = {
                 return callback(null, false);
             }
         });
-    },
-
-    
+    }
 };
 
 module.exports = info;
