@@ -10,35 +10,49 @@ const c = {
 
         if (!cart_id) {
             const user_id = req.session.user_id || null;
-            const created_at = new Date();
-
-            const createCartQuery = "INSERT INTO cart (user_id, created_at) VALUES (?, ?)";
-            db.query(createCartQuery, [user_id, created_at], (err, result) => {
+        
+            // Try to fetch an existing cart for the user before creating a new one
+            const getCartQuery = "SELECT cart_id FROM cart WHERE user_id = ? ORDER BY created_at DESC LIMIT 1";
+            db.query(getCartQuery, [user_id], (err, result) => {
                 if (err) {
-                    console.error('Error creating new cart:', err);
-                    return res.status(500).send('Error creating new cart.');
+                    console.error('Error fetching user cart:', err);
+                    return res.status(500).send('Error fetching user cart.');
                 }
-
-                cart_id = result.insertId;
-                req.session.cart_id = cart_id;
-
-                // Add product to cart using the new model method
-                cartModel.addOrUpdateProduct(cart_id, product_id, price, (err) => {
-                    if (err) {
-                        console.error('Error adding product to cart:', err);
-                        return res.status(500).send('Error adding product to cart.');
-                    }
-                    res.redirect('/cart');
-                });
-            });
-        } else {
-            // Cart ID exists, so directly add or update the product in the cart
-            cartModel.addOrUpdateProduct(cart_id, product_id, price, (err) => {
-                if (err) {
-                    console.error('Error adding product to cart:', err);
-                    return res.status(500).send('Error adding product to cart.');
+        
+                if (result.length > 0) {
+                    cart_id = result[0].cart_id;
+                    req.session.cart_id = cart_id;
+        
+                    // Add product to cart using the new model method
+                    cartModel.addOrUpdateProduct(cart_id, product_id, price, (err) => {
+                        if (err) {
+                            console.error('Error adding product to cart:', err);
+                            return res.status(500).send('Error adding product to cart.');
+                        }
+                        res.redirect('/cart');
+                    });
+                } else {
+                    // No existing cart, create a new one
+                    const created_at = new Date();
+                    const createCartQuery = "INSERT INTO cart (user_id, created_at) VALUES (?, ?)";
+                    db.query(createCartQuery, [user_id, created_at], (err, result) => {
+                        if (err) {
+                            console.error('Error creating new cart:', err);
+                            return res.status(500).send('Error creating new cart.');
+                        }
+        
+                        cart_id = result.insertId;
+                        req.session.cart_id = cart_id;
+        
+                        cartModel.addOrUpdateProduct(cart_id, product_id, price, (err) => {
+                            if (err) {
+                                console.error('Error adding product to cart:', err);
+                                return res.status(500).send('Error adding product to cart.');
+                            }
+                            res.redirect('/cart');
+                        });
+                    });
                 }
-                res.redirect('/cart');
             });
         }
     },
@@ -47,7 +61,19 @@ const c = {
     cart: (req, res) => {
         cartModel.getAllItems((err, result) => {
             if (err) throw err;
-            res.render('cart', { cartItems: result, username: req.session.username || null });
+    
+            // Calculate subtotal
+            const subtotal = result.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const shippingFee = 45; // Fixed shipping fee
+            const total = subtotal + shippingFee; // Total price
+    
+            res.render('cart', { 
+                cartItems: result, 
+                username: req.session.username || null,
+                subtotal: subtotal,
+                shippingFee: shippingFee,
+                total: total
+            });
         });
     },
 
