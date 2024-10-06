@@ -12,8 +12,17 @@ const Product = {
     },
 
     deleteProduct: (product_id, callback) => {
-        const query = "DELETE FROM products WHERE product_id = ?";
-        db.query(query, [product_id], callback);
+        const deleteCartItemsQuery = "DELETE FROM cart_items WHERE product_id = ?";
+        db.query(deleteCartItemsQuery, [product_id], (err, result) => {
+            if (err) {
+                console.error('Error deleting cart items:', err);
+                return callback(err, null);
+            }
+
+            // After successfully deleting cart items, delete the product
+            const deleteProductQuery = "DELETE FROM products WHERE product_id = ?";
+            db.query(deleteProductQuery, [product_id], callback);
+        });
     },
 
     getById: (product_id, callback) => {
